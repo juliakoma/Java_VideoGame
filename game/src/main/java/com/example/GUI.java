@@ -12,7 +12,7 @@ public class GUI extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
 
-        System.out.println("testing github");
+        System.out.println("hi github");
 
         stage.show();
     }

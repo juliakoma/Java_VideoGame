@@ -28,20 +28,16 @@ public class GUI extends Application {
         Image layer3 = new Image("file:background_layer3.png");
 
         //Image layer1 = new Image("file:images/background_layer1.png");
-        Image layer1 = new Image("file:images/background_0");
+        Image layer1 = new Image("file:background_images/background_0");
 
         ImageView layer1View = new ImageView(layer1);
         layer1View.setFitWidth(510); // Set the width of the ImageView
         layer1View.setFitHeight(510); // Set the height of the ImageView
         
         root.getChildren().add(layer1View); // Add the ImageView to the Group
-        
-        stage.setScene(scene); // Set the Scene to the Stage
-        
+                
         stage.show(); // Show the Stage
-        
-        
-
+    
     }
 
     public static void main(String[] args) {

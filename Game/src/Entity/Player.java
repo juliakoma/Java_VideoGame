@@ -158,6 +158,15 @@ public class Player extends MapObject{
             }
         }
 
+        // update fireballs
+        for (int i = 0; i < fireBalls.size(); i++){
+            fireBalls.get(i).update();
+            if (fireBalls.get(i).shouldRemove()){
+                fireBalls.remove(i);
+                i--;
+            }
+        }
+
         // set animations
         if(scratching){
             if (currentAction != SCRATCHING){
@@ -227,6 +236,11 @@ public class Player extends MapObject{
 
     public void draw(Graphics2D g){
         setMapPosition();
+
+        // draw fireballs
+        for (int i = 0; i < fireBalls.size(); i++){
+            fireBalls.get(i).draw(g);
+        }
 
         // draw player
         if(flinching){

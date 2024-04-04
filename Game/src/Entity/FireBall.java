@@ -76,6 +76,11 @@ public class FireBall extends MapObject{
         checkTileMapCollision();
         setPosition(xtemp, ytemp);
 
+        // whenever fireball hits a tile
+        if (dx == 0 && !hit){
+            setHit();
+        }
+
         animation.update();
         if (hit && animation.hasPlayedOnce()){
             remove = true;

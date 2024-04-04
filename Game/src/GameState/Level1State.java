@@ -35,6 +35,7 @@ public class Level1State extends GameState{
         tileMap.loadTiles(tileImages);
         tileMap.loadMap("/Resources/Maps/level1-1.map");
         tileMap.setPosition(0, 0);
+        tileMap.setTween(1);
 
         bg = new Background("/Resources/Backgrounds/Sunset.png", 0.1);
     
@@ -87,8 +88,12 @@ public class Level1State extends GameState{
     }
 
     public void update(){
+        // update player
         player.update();
         tileMap.setPosition(GamePanel.WIDTH / 2 - player.getx(), GamePanel.HEIGHT / 2 - player.gety());
+   
+        // set background
+        bg.setPosition(tileMap.getx(), tileMap.gety() );
     }
 
     public void draw(Graphics2D g){

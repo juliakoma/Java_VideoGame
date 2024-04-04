@@ -23,7 +23,8 @@ public class Player extends MapObject{
     private int fireCost;
     private int fireBallDamage;
 
-    //private ArrayList<FireBall> fireBalls;
+    private ArrayList<FireBall> fireBalls;
+
     // scratch
     private boolean scratching;
     private int scratchDamage;
@@ -76,14 +77,14 @@ public class Player extends MapObject{
         fireCost = 200;
         fireBallDamage = 5;
 
-        // fireballs = new ArrayList<FireBall>();
+        fireBalls = new ArrayList<FireBall>();
         scratchDamage = 8;
         scratchRange = 40;
 
         // load sprites
         try{
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/playersprites.gif"));
-            //BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/Warrior_sprites.png"));
+            //BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/playersprites.gif"));
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/Warrior_sprites.png"));
 
             sprites = new ArrayList<BufferedImage[]>();
 
@@ -92,11 +93,11 @@ public class Player extends MapObject{
 
                 for (int j = 0; j < numFrames[i]; j ++){
                     // if isn't last row, last row 60x60, not 30x30
-                    if (i != 6){
+                    if (i != SCRATCHING){
                         bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
                     } 
                     else{
-                        bi[j] = spritesheet.getSubimage(j * width * 2, i * height, width, height);
+                        bi[j] = spritesheet.getSubimage(j * width * 2, i * height, width * 2, height);
                     }
                 }
 
@@ -135,6 +136,27 @@ public class Player extends MapObject{
         getNextPosition();
         checkTileMapCollision();
         setPosition(xtemp, ytemp);
+
+        // check attack has stopped
+        if (currentAction == SCRATCHING){
+            if (animation.hasPlayedOnce()) scratching = false;
+        }
+
+        if (currentAction == FIREBALL){
+            if (animation.hasPlayedOnce()) firing = false; 
+        }
+
+        // fireball attack
+        fire += 1;
+        if (fire > maxFire) fire = maxFire;
+        if (firing && currentAction != FIREBALL){
+            if (fire > fireCost){
+                fire -= fireCost;
+                FireBall fb = new FireBall(tileMap, facingRight);
+                fb.setPosition(x, y);
+                fireBalls.add(fb);
+            }
+        }
 
         // set animations
         if(scratching){

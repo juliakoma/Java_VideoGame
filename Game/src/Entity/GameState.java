@@ -1,4 +1,6 @@
-package GameState;
+package Entity;
+
+import GameState.GameStateManager;
 
 public abstract class GameState {
 	

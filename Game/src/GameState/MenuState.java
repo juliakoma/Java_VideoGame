@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.*;
 
+import Entity.GameState;
 import Main.GamePanel;
 
 public class MenuState extends GameState {

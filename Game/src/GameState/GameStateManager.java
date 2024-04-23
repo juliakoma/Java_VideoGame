@@ -2,6 +2,8 @@ package GameState;
 
 import java.util.ArrayList;
 
+import Entity.GameState;
+
 public class GameStateManager {
 	
 	private ArrayList<GameState> gameStates;

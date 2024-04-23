@@ -1,4 +1,5 @@
 package Entity;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import Main.GamePanel;
@@ -68,7 +69,7 @@ public abstract class MapObject {
         tileSize = tm.getTileSize();
     }
 
-    public boolean interseect(MapObject o){
+    public boolean intersect(MapObject o){
         Rectangle r1 = getRectangle();
         Rectangle r2 = o.getRectangle();
         return r1.intersects(r2);
@@ -197,5 +198,24 @@ public abstract class MapObject {
     public boolean notOnScreen(){
         return (x + xmap + width < 0) || (x + xmap - width > GamePanel.WIDTH) ||
             (y + ymap + height < 0) || (y + ymap - height > GamePanel.HEIGHT);
+    }
+
+    public void draw(Graphics2D g){
+        if (facingRight){
+            g.drawImage(animation.getImage(), 
+                (int) (x + xmap - width / 2), 
+                (int) (y + ymap - height / 2), 
+                null
+            );
+        }
+        else{
+            g.drawImage(animation.getImage(), 
+                (int) (x + xmap - width /2 + width),
+                (int) (y + ymap - height / 2),
+                -width,
+                height,
+                null
+            );
+        }
     }
 }

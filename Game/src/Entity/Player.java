@@ -36,13 +36,13 @@ public class Player extends MapObject{
     // animations
     private ArrayList<BufferedImage[]> sprites;
     // number of frames for each of the actions (sprite sheet)
-    private final int[] numFrames = {
-        2, 8, 1, 2, 4, 2, 5
-    };
-
     /*private final int[] numFrames = {
+        2, 8, 1, 2, 4, 2, 5
+    };*/
+
+    private final int[] numFrames = {
             6, 8, 1, 2, 4, 2, 5
-        };*/
+        };
 
     // animation actions
     private static final int IDLE = 0;
@@ -57,10 +57,11 @@ public class Player extends MapObject{
         super(tm);
 
         // change this
-        width = 30;
-        height = 30;
-        cwidth = 20;
-        cheight = 20;
+        //width = 30;
+        width = 40;
+        height = 40;
+        cwidth = 40;
+        cheight = 40;
 
         moveSpeed = 0.3;
         maxSpeed = 1.6;
@@ -82,7 +83,7 @@ public class Player extends MapObject{
         scratchRange = 40;
 
         // load sprites
-        try{
+        /*try{
             //BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/playersprites.gif"));
             BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/Warrior_sprites.png"));
 
@@ -97,7 +98,9 @@ public class Player extends MapObject{
                         bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
                     } 
                     else{
-                        bi[j] = spritesheet.getSubimage(j * width * 2, i * height, width * 2, height);
+                        //bi[j] = spritesheet.getSubimage(j * width * 2, i * height, width * 2, height);
+                        bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
+
                     }
                 }
 
@@ -106,8 +109,64 @@ public class Player extends MapObject{
         }
         catch(Exception e){
             e.printStackTrace();
-        }
+        }*/
 
+        /*try {
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/Warrior_sprites.png"));
+            int spriteWidth = spritesheet.getWidth() / 6;
+            int spriteHeight = spritesheet.getHeight() / 17;
+
+            sprites = new ArrayList<BufferedImage[]>();
+        
+            // Define motion indices and number of frames
+            int[][] motionInfo = {
+                {0, 0, 6},  // Idle
+                {0, 6, 2},  // Run
+                {1, 0, 4}
+                //{0, 14, 12},  // Combo attack
+                // Add more motions here...
+            };
+        
+            for (int i = 0; i < motionInfo.length; i++) {
+                int startRow = motionInfo[i][0];
+                int startCol = motionInfo[i][1];
+                int numFrames = motionInfo[i][2];
+        
+                BufferedImage[] bi = new BufferedImage[numFrames];
+        
+                for (int j = 0; j < numFrames; j++) {
+                    bi[j] = spritesheet.getSubimage(startCol * spriteWidth, startRow * spriteHeight, spriteWidth, spriteHeight);
+                }
+        
+                sprites.add(bi);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+        try {
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/Warrior_sprites.png"));
+        
+            sprites = new ArrayList<BufferedImage[]>();
+        
+            int rows = 17; // First 14 rows
+            int cols = 6; // 6 sprites per row
+        
+            int spriteWidth = spritesheet.getWidth() / cols;
+            int spriteHeight = spritesheet.getHeight() / rows;
+        
+            for (int i = 0; i < rows; i++) {
+                BufferedImage[] bi = new BufferedImage[cols];
+        
+                for (int j = 0; j < cols; j++) {
+                    bi[j] = spritesheet.getSubimage(j * spriteWidth, i * spriteHeight, spriteWidth, spriteHeight);
+                }
+        
+                sprites.add(bi);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         animation = new Animation();
         currentAction = IDLE;
         animation.setFrames(sprites.get(IDLE));
@@ -167,6 +226,15 @@ public class Player extends MapObject{
             }
         }
 
+        // check if player done flinching
+        if (flinching){
+            long elapsed = (System.nanoTime() - flinchTimer) / 1000000;
+
+            if (elapsed > 1000){
+                flinching = false;
+            }
+        }
+
         // set animations
         if(scratching){
             if (currentAction != SCRATCHING){
@@ -181,7 +249,7 @@ public class Player extends MapObject{
                 currentAction = FIREBALL;
                 animation.setFrames(sprites.get(FIREBALL));
                 animation.setDelay(100);
-                width = 30;
+                width = 40;
             }
         }
         else if (dy > 0){
@@ -190,14 +258,14 @@ public class Player extends MapObject{
                     currentAction = GLIDING;
                     animation.setFrames(sprites.get(GLIDING));
                     animation.setDelay(100);
-                    width = 30;
+                    width = 40;
                 }
             }
             else if(currentAction != FALLING){
                 currentAction = FALLING;
                 animation.setFrames(sprites.get(FALLING));
                 animation.setDelay(100);
-                width = 30;
+                width = 40;
             }
         }
         else if (dy < 0){
@@ -205,7 +273,7 @@ public class Player extends MapObject{
                 currentAction = JUMPING;
                 animation.setFrames(sprites.get(JUMPING));
                 animation.setDelay(-1);
-                width = 30;
+                width = 40;
             }
         }
         else if (left || right){
@@ -213,7 +281,7 @@ public class Player extends MapObject{
                 currentAction = WALKING;
                 animation.setFrames(sprites.get(WALKING));
                 animation.setDelay(40);
-                width = 30; 
+                width = 40;
             }
         }
         else{
@@ -221,7 +289,7 @@ public class Player extends MapObject{
                 currentAction = IDLE;
                 animation.setFrames(sprites.get(IDLE));
                 animation.setDelay(400);
-                width = 30;
+                width = 40;
             }
         }
 
@@ -251,22 +319,7 @@ public class Player extends MapObject{
             }
         }
 
-        if (facingRight){
-            g.drawImage(animation.getImage(), 
-                (int) (x + xmap - width / 2), 
-                (int) (y + ymap - height / 2), 
-                null
-            );
-        }
-        else{
-            g.drawImage(animation.getImage(), 
-                (int) (x + xmap - width /2 + width),
-                (int) (y + ymap - height / 2),
-                -width,
-                height,
-                null
-            );
-        }
+        super.draw(g);
     }
 
     private void getNextPosition(){
@@ -321,6 +374,70 @@ public class Player extends MapObject{
             if (dy > maxFallSpeed) dy = maxFallSpeed;
         }
         
+    }
+
+
+
+    public void checkAttack(ArrayList<Enemy> enemies){
+        // loop through enemies
+        for (int i = 0; i < enemies.size(); i++){
+            Enemy e = enemies.get(i);
+
+            // scratch attack
+            if (scratching){
+                if (facingRight){
+                    if (e.getx() > x &&
+                        e.getx() < x + scratchRange &&
+                        e.gety() > y - height / 2 &&
+                        e.gety() < y + height / 2
+                    ){
+                        e.hit(scratchDamage);
+                    }
+                }
+                else{
+                    if(
+                        e.getx() < x &&
+                        e.getx() > x - scratchRange &&
+                        e.gety() > y - height / 2 &&
+                        e.gety() < y + height / 2
+                    ){
+                        e.hit(scratchDamage);
+                    }
+                }
+            }
+
+            // check for fire
+            for (int j = 0; j < fireBalls.size(); j ++){
+                if (fireBalls.get(j).intersect(e)){
+                    e.hit(fireBallDamage);
+                    fireBalls.get(j).setHit();
+                    break;
+                }
+            }
+
+            // check for enemy attack
+            if (intersect(e)){
+                System.out.println("PLAYER IS HIT");
+                hit(e.getDamage());
+            }
+        }
+    }
+
+    public void hit(int damage){
+
+        if (flinching) return;
+
+        health -= damage;
+        if (health < 0){
+            health = 0;
+        }
+
+        if (health == 0){
+            dead = true;
+        }
+
+        flinching = true;
+        flinchTimer = System.nanoTime();  
     }
 
 }

@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class Player extends MapObject{
+    // Desired dimensions for each sprite
+    int desiredWidth = 69;
+    int desiredHeight = 44;
+    
     // player attributes
     private int health;
     private int maxHealth;
@@ -35,33 +40,43 @@ public class Player extends MapObject{
 
     // animations
     private ArrayList<BufferedImage[]> sprites;
-    // number of frames for each of the actions (sprite sheet)
-    /*private final int[] numFrames = {
-        2, 8, 1, 2, 4, 2, 5
-    };*/
 
+    /*private final int[] numFrames = {
+            6, // Idle 0
+            8, // Walking 1
+            9, // Attack 2
+            9, // Death 3
+            8, // Jump 4
+            7, // Dash 5
+        };*/
     private final int[] numFrames = {
-            6, 8, 1, 2, 4, 2, 5
-        };
+        6, // Idle 0
+        8, // Walking 1
+        6, // Attack 2
+        6, // Death 3
+        6, // Jump 4
+        6, // Dash 5
+        6
+    };
 
     // animation actions
     private static final int IDLE = 0;
     private static final int WALKING = 1;
-    private static final int JUMPING = 2;
-    private static final int FALLING = 3;
+    private static final int JUMPING = 4;
+    private static final int FALLING = 4;
     private static final int GLIDING = 4;
-    private static final int FIREBALL = 5;
-    private static final int SCRATCHING = 6;
+    private static final int FIREBALL = 6;
+    private static final int SCRATCHING = 2;
 
     public Player(TileMap tm){
         super(tm);
 
         // change this
         //width = 30;
-        width = 40;
-        height = 40;
-        cwidth = 40;
-        cheight = 40;
+        width = 45;
+        height = 45;
+        cwidth = 45;
+        cheight = 45;
 
         moveSpeed = 0.3;
         maxSpeed = 1.6;
@@ -83,87 +98,31 @@ public class Player extends MapObject{
         scratchRange = 40;
 
         // load sprites
-        /*try{
-            //BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/playersprites.gif"));
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/Warrior_sprites.png"));
-
-            sprites = new ArrayList<BufferedImage[]>();
-
-            for (int i = 0; i < 7; i++){
-                BufferedImage[] bi = new BufferedImage[numFrames[i]];
-
-                for (int j = 0; j < numFrames[i]; j ++){
-                    // if isn't last row, last row 60x60, not 30x30
-                    if (i != SCRATCHING){
-                        bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
-                    } 
-                    else{
-                        //bi[j] = spritesheet.getSubimage(j * width * 2, i * height, width * 2, height);
-                        bi[j] = spritesheet.getSubimage(j * width, i * height, width, height);
-
-                    }
-                }
-
-                sprites.add(bi);
-            }
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }*/
-
-        /*try {
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/Warrior_sprites.png"));
-            int spriteWidth = spritesheet.getWidth() / 6;
-            int spriteHeight = spritesheet.getHeight() / 17;
-
-            sprites = new ArrayList<BufferedImage[]>();
-        
-            // Define motion indices and number of frames
-            int[][] motionInfo = {
-                {0, 0, 6},  // Idle
-                {0, 6, 2},  // Run
-                {1, 0, 4}
-                //{0, 14, 12},  // Combo attack
-                // Add more motions here...
-            };
-        
-            for (int i = 0; i < motionInfo.length; i++) {
-                int startRow = motionInfo[i][0];
-                int startCol = motionInfo[i][1];
-                int numFrames = motionInfo[i][2];
-        
-                BufferedImage[] bi = new BufferedImage[numFrames];
-        
-                for (int j = 0; j < numFrames; j++) {
-                    bi[j] = spritesheet.getSubimage(startCol * spriteWidth, startRow * spriteHeight, spriteWidth, spriteHeight);
-                }
-        
-                sprites.add(bi);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
         try {
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/Warrior_sprites.png"));
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/test.png"));
         
-            sprites = new ArrayList<BufferedImage[]>();
+            sprites = new ArrayList<>();
         
-            int rows = 17; // First 14 rows
-            int cols = 6; // 6 sprites per row
+            int numRows = numFrames.length;
+            System.out.println("Number of rows: " + numRows);
         
-            int spriteWidth = spritesheet.getWidth() / cols;
-            int spriteHeight = spritesheet.getHeight() / rows;
+            for (int i = 0; i < numRows; i++) {
+                int frames = numFrames[i];
+                System.out.println("Number of frames for row " + i + ": " + frames);
         
-            for (int i = 0; i < rows; i++) {
-                BufferedImage[] bi = new BufferedImage[cols];
+                BufferedImage[] bi = new BufferedImage[frames];
         
-                for (int j = 0; j < cols; j++) {
-                    bi[j] = spritesheet.getSubimage(j * spriteWidth, i * spriteHeight, spriteWidth, spriteHeight);
+                for (int j = 0; j < frames; j++) {
+                    // Calculate the coordinates based on the desired sprite dimensions
+                    int startX = j * desiredWidth;
+                    int startY = i * desiredHeight;
+                    System.out.println("Extracting subimage at coordinates: (" + startX + ", " + startY + ")");
+                    bi[j] = spritesheet.getSubimage(startX, startY, desiredWidth, desiredHeight);
                 }
         
                 sprites.add(bi);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         
@@ -234,7 +193,6 @@ public class Player extends MapObject{
                 flinching = false;
             }
         }
-        
 
         // set animations
         if(scratching){
@@ -280,14 +238,18 @@ public class Player extends MapObject{
         else if (left || right){
             if (currentAction != WALKING){
                 currentAction = WALKING;
+                System.out.println("CHARACTER IS WALKING" + currentAction);
+
                 animation.setFrames(sprites.get(WALKING));
+                System.out.println("LENGTH OF WALKING FRAMES IS " + sprites.get(WALKING).length);
                 animation.setDelay(40);
-                width = 40;
+                width = 45;
             }
         }
         else{
             if (currentAction != IDLE){
                 currentAction = IDLE;
+
                 animation.setFrames(sprites.get(IDLE));
                 animation.setDelay(400);
                 width = 40;
@@ -377,8 +339,6 @@ public class Player extends MapObject{
         
     }
 
-
-
     public void checkAttack(ArrayList<Enemy> enemies){
         // loop through enemies
         for (int i = 0; i < enemies.size(); i++){
@@ -418,7 +378,6 @@ public class Player extends MapObject{
 
             // check for enemy attack
             if (intersect(e)){
-                System.out.println("PLAYER IS HIT");
                 hit(e.getDamage());
             }
         }

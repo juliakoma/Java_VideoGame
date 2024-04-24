@@ -39,11 +39,21 @@ public class Animation {
 			currentFrame = 0;
 			playedOnce = true;
 		}
+
+		//TESTING//
+		if (currentFrame == frames.length) {
+			System.out.println("Animation looped back to the beginning.");
+			currentFrame = 0;
+			playedOnce = true;
+		}
+
 		
 	}
 	
 	public int getFrame() { return currentFrame; }
-	public BufferedImage getImage() { return frames[currentFrame]; }
+	public BufferedImage getImage() { 
+		return frames[currentFrame]; 
+	}
 	public boolean hasPlayedOnce() { return playedOnce; }
 	
 }

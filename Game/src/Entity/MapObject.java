@@ -212,7 +212,7 @@ public abstract class MapObject {
             g.drawImage(animation.getImage(), 
                 (int) (x + xmap - width /2 + width),
                 (int) (y + ymap - height / 2),
-                -width,
+                -width - 25,
                 height,
                 null
             );

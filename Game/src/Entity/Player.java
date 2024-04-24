@@ -234,6 +234,7 @@ public class Player extends MapObject{
                 flinching = false;
             }
         }
+        
 
         // set animations
         if(scratching){

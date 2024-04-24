@@ -14,6 +14,7 @@ public class Player extends MapObject{
     // player attributes
     private int health;
     private int maxHealth;
+    protected boolean player;
 
     // CHANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEeEE
     private int fire;
@@ -75,8 +76,8 @@ public class Player extends MapObject{
         //width = 30;
         width = 45;
         height = 45;
-        cwidth = 45;
-        cheight = 45;
+        cwidth = 35;
+        cheight = 35;
 
         moveSpeed = 0.3;
         maxSpeed = 1.6;
@@ -96,6 +97,7 @@ public class Player extends MapObject{
         fireBalls = new ArrayList<FireBall>();
         scratchDamage = 8;
         scratchRange = 40;
+        player = false;
 
         // load sprites
         try {
@@ -200,7 +202,7 @@ public class Player extends MapObject{
                 currentAction = SCRATCHING;
                 animation.setFrames(sprites.get(SCRATCHING));
                 animation.setDelay(50);
-                width = 60;
+                width = 45;
             }
         }
         else if (firing){
@@ -208,7 +210,7 @@ public class Player extends MapObject{
                 currentAction = FIREBALL;
                 animation.setFrames(sprites.get(FIREBALL));
                 animation.setDelay(100);
-                width = 40;
+                width = 45;
             }
         }
         else if (dy > 0){
@@ -238,10 +240,8 @@ public class Player extends MapObject{
         else if (left || right){
             if (currentAction != WALKING){
                 currentAction = WALKING;
-                System.out.println("CHARACTER IS WALKING" + currentAction);
 
                 animation.setFrames(sprites.get(WALKING));
-                System.out.println("LENGTH OF WALKING FRAMES IS " + sprites.get(WALKING).length);
                 animation.setDelay(40);
                 width = 45;
             }
@@ -260,8 +260,14 @@ public class Player extends MapObject{
 
         // set direction
         if (currentAction != SCRATCHING && currentAction != FIREBALL){
-            if (right) facingRight = true;
-            if (left) facingRight = false;
+            if (right) {
+                facingRight = true;
+                player = false;
+            }
+            if (left) {
+                facingRight = false;
+                player = true;
+            }
         }
     }
 

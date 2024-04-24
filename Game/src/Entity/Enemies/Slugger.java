@@ -19,7 +19,7 @@ public class Slugger extends Enemy {
         maxSpeed = 0.3;
         fallSpeed = 0.2;
         maxFallSpeed = 10.0;
-
+        player = false;
         width = 30;
         height = 30;
         cwidth = 20;

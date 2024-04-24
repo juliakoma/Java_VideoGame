@@ -62,6 +62,7 @@ public abstract class MapObject {
     protected double maxFallSpeed;
     protected double jumpStart;
     protected double stopJumpSpeed;
+    protected boolean player;
 
     // constructor
     public MapObject(TileMap tm){
@@ -189,7 +190,11 @@ public abstract class MapObject {
         ymap = tileMap.gety();
     }
 
-    public void setLeft(boolean b){ left = b;}
+    public void setLeft(boolean b){ 
+        player = true;
+        left = b;
+    }
+
     public void setRight(boolean b){ right = b;}
     public void setUp(boolean b){ up = b;}
     public void setDown(boolean b){ down = b;}
@@ -209,10 +214,15 @@ public abstract class MapObject {
             );
         }
         else{
+            System.out.println("PLAYER IS MOVING LEFT " + player);
+            int xOffset = 0; // Default value for xOffset
+            if (player) {
+                xOffset = -25; // Adjust the xOffset if the player is moving to the left
+            }
             g.drawImage(animation.getImage(), 
-                (int) (x + xmap - width /2 + width),
+                (int) (x + xmap - width / 2 + width), // Adjust the X position based on the xOffset
                 (int) (y + ymap - height / 2),
-                -width - 25,
+                -width + xOffset,
                 height,
                 null
             );

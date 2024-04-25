@@ -42,22 +42,13 @@ public class Player extends MapObject{
     // animations
     private ArrayList<BufferedImage[]> sprites;
 
-    /*private final int[] numFrames = {
-            6, // Idle 0
-            8, // Walking 1
-            9, // Attack 2
-            9, // Death 3
-            8, // Jump 4
-            7, // Dash 5
-        };*/
     private final int[] numFrames = {
         6, // Idle 0
         8, // Walking 1
-        6, // Attack 2
-        6, // Death 3
-        6, // Jump 4
-        6, // Dash 5
-        6
+        8, // Attack 2
+        8, // Death 3
+        8, // Jump 4
+        6 // Fireball 5
     };
 
     // animation actions
@@ -66,7 +57,7 @@ public class Player extends MapObject{
     private static final int JUMPING = 4;
     private static final int FALLING = 4;
     private static final int GLIDING = 4;
-    private static final int FIREBALL = 6;
+    private static final int FIREBALL = 5;
     private static final int SCRATCHING = 2;
 
     public Player(TileMap tm){
@@ -101,7 +92,7 @@ public class Player extends MapObject{
 
         // load sprites
         try {
-            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/test.png"));
+            BufferedImage spritesheet = ImageIO.read(getClass().getResourceAsStream("/Resources/Sprites/Player/PlayerSprites.png"));
         
             sprites = new ArrayList<>();
         

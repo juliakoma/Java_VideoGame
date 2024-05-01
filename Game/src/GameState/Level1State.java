@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 import Main.Game;
 import Main.GamePanel;
@@ -23,6 +24,11 @@ public class Level1State extends GameState{
 
     private ArrayList<Enemy> enemies;
     private ArrayList<Explosion> explosions;
+
+    private boolean gameOver;
+    private boolean gamePaused;
+    private long gameOverStartTime;
+    private boolean gameOverCountdownStarted;
 
     private HUD hud;
 
@@ -54,6 +60,10 @@ public class Level1State extends GameState{
         explosions = new ArrayList<Explosion>();
 
         hud = new HUD(player);
+
+        gameOver = false;
+        gamePaused = false;
+        gameOverCountdownStarted = false;
     }
 
     private void populateEnemies(){
@@ -120,88 +130,169 @@ public class Level1State extends GameState{
     }
 
     public void update(){
-        // update player
-        player.update();
-        tileMap.setPosition(GamePanel.WIDTH / 2 - player.getx(), GamePanel.HEIGHT / 2 - player.gety());
-   
-        // set background
-        bg.setPosition(tileMap.getx(), tileMap.gety() );
 
-        // check if player is trying to attack enemies
-        player.checkAttack(enemies);
+        if (!gameOver && !gamePaused){
+            // update player
+            player.update();
+            tileMap.setPosition(GamePanel.WIDTH / 2 - player.getx(), GamePanel.HEIGHT / 2 - player.gety());
+    
+            // set background
+            bg.setPosition(tileMap.getx(), tileMap.gety() );
 
-        // update enemies
-        for (int i = 0; i < enemies.size(); i++){
-            Enemy e = enemies.get(i);
-            e.update();
+            // check if player is trying to attack enemies
+            player.checkAttack(enemies);
 
-            if (e.isDead()){
-                enemies.remove(i);
-                i--;
-                explosions.add(new Explosion(e.getx(), e.gety()));
+            // update enemies
+            for (int i = 0; i < enemies.size(); i++){
+                Enemy e = enemies.get(i);
+                e.update();
+
+                if (e.isDead()){
+                    enemies.remove(i);
+                    i--;
+                    explosions.add(new Explosion(e.getx(), e.gety()));
+                }
             }
-        }
 
-        // update explosions
-        for (int i = 0; i < explosions.size(); i++){
-            explosions.get(i).update(); 
-            if (explosions.get(i).shouldRemove()){
-                explosions.remove(i);
-                i--;
+            // update explosions
+            for (int i = 0; i < explosions.size(); i++){
+                explosions.get(i).update(); 
+                if (explosions.get(i).shouldRemove()){
+                    explosions.remove(i);
+                    i--;
+                }
             }
-        }
+
+            if (player.isDead() && !gameOverCountdownStarted) {
+                gameOverStartTime = System.currentTimeMillis();
+                gameOverCountdownStarted = true;
+                gameOver = true;
+            }
+        } else if (gameOver && !gamePaused && gameOverCountdownStarted) {
+            // update player
+            player.update();
+            tileMap.setPosition(GamePanel.WIDTH / 2 - player.getx(), GamePanel.HEIGHT / 2 - player.gety());
+    
+            // set background
+            bg.setPosition(tileMap.getx(), tileMap.gety() );
+
+            // check if player is trying to attack enemies
+            player.checkAttack(enemies);
+
+            // update enemies
+            for (int i = 0; i < enemies.size(); i++){
+                Enemy e = enemies.get(i);
+                e.update();
+
+                if (e.isDead()){
+                    enemies.remove(i);
+                    i--;
+                    explosions.add(new Explosion(e.getx(), e.gety()));
+                }
+            }
+            // If the game over countdown has started and the game is not paused,
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - gameOverStartTime >= 4000) { 
+                gamePaused = true;
+            }
+        } 
+        else{}
     }
-
+    
     public void draw(Graphics2D g){
-        // draw background
-        bg.draw(g);
 
-        // draw tilemap
-        tileMap.draw(g); 
+        if (!gameOver && !gamePaused){
+            // draw background
+            bg.draw(g);
 
-        // draw player
-        player.draw(g);
+            // draw tilemap
+            tileMap.draw(g); 
 
-        // draw enemies
-        for (int i = 0; i < enemies.size(); i++){
-            enemies.get(i).draw(g);
+            // draw player
+            player.draw(g);
+
+            // draw enemies
+            for (int i = 0; i < enemies.size(); i++){
+                enemies.get(i).draw(g);
+            }
+
+            // draw explosions
+            for (int i = 0; i < explosions.size(); i++){
+                explosions.get(i).setMapPosition((int)tileMap.getx(), (int)tileMap.gety());
+                explosions.get(i).draw(g);
+            }
+
+            // draw hud
+            hud.draw(g);
+        }
+        else if (gameOver && !gamePaused){
+            // draw background
+            bg.draw(g);
+
+            // draw tilemap
+            tileMap.draw(g); 
+
+            // draw player
+            player.draw(g);
+
+            // draw enemies
+            for (int i = 0; i < enemies.size(); i++){
+                enemies.get(i).draw(g);
+            }
+
+            // draw explosions
+            for (int i = 0; i < explosions.size(); i++){
+                explosions.get(i).setMapPosition((int)tileMap.getx(), (int)tileMap.gety());
+                explosions.get(i).draw(g);
+            }
+
+            // draw hud
+            hud.draw(g);
+        }
+        else if (gamePaused){
+            // Draw game over screen if game is over or paused
+            g.setColor(new Color(0, 0, 0, 150)); 
+            g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+            
+            // Draw "Game Over" text
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 36));
+            String gameOverMsg = "GAME OVER";
+            int msgWidth = g.getFontMetrics().stringWidth(gameOverMsg);
+            g.drawString(gameOverMsg, (GamePanel.WIDTH - msgWidth) / 2, GamePanel.HEIGHT / 2);
+            
         }
 
-        // draw explosions
-        for (int i = 0; i < explosions.size(); i++){
-            explosions.get(i).setMapPosition((int)tileMap.getx(), (int)tileMap.gety());
-            explosions.get(i).draw(g);
-        }
-
-        // draw hud
-        hud.draw(g);
     }
 
     public void keyPressed(int k){
-        if(k == KeyEvent.VK_LEFT){
-            player.setLeft(true);
+        if (!gameOver && !gamePaused){
+            if(k == KeyEvent.VK_LEFT){
+                player.setLeft(true);
+            }
+            if (k == KeyEvent.VK_RIGHT){
+                player.setRight(true);
+            }
+            if (k == KeyEvent.VK_UP){
+                player.setUp(true);
+            }       
+            if (k == KeyEvent.VK_DOWN){
+                player.setDown(true);
+            }    
+            if (k == KeyEvent.VK_SPACE){
+                player.setJumping(true);
+            }
+            if (k == KeyEvent.VK_E){
+                player.setGliding(true);
+            }
+            if (k == KeyEvent.VK_R){
+                player.setScratching();
+            }
+            if (k == KeyEvent.VK_F){
+                player.setFiring();
+            }
         }
-        if (k == KeyEvent.VK_RIGHT){
-            player.setRight(true);
-        }
-        if (k == KeyEvent.VK_UP){
-            player.setUp(true);
-        }       
-        if (k == KeyEvent.VK_DOWN){
-            player.setDown(true);
-        }    
-        if (k == KeyEvent.VK_SPACE){
-            player.setJumping(true);
-        }
-        if (k == KeyEvent.VK_E){
-            player.setGliding(true);
-        }
-        if (k == KeyEvent.VK_R){
-            player.setScratching();
-        }
-        if (k == KeyEvent.VK_F){
-            player.setFiring();
-        }
+
     }
 
     public void keyReleased(int k){

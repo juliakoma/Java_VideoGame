@@ -214,7 +214,6 @@ public abstract class MapObject {
             );
         }
         else{
-            System.out.println("PLAYER IS MOVING LEFT " + player);
             int xOffset = 0; // Default value for xOffset
             if (player) {
                 xOffset = -25; // Adjust the xOffset if the player is moving to the left

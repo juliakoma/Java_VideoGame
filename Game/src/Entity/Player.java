@@ -59,6 +59,7 @@ public class Player extends MapObject{
     private static final int GLIDING = 4;
     private static final int FIREBALL = 5;
     private static final int SCRATCHING = 2;
+    private static final int DEATH = 3;
 
     public Player(TileMap tm){
         super(tm);
@@ -97,11 +98,9 @@ public class Player extends MapObject{
             sprites = new ArrayList<>();
         
             int numRows = numFrames.length;
-            System.out.println("Number of rows: " + numRows);
         
             for (int i = 0; i < numRows; i++) {
                 int frames = numFrames[i];
-                System.out.println("Number of frames for row " + i + ": " + frames);
         
                 BufferedImage[] bi = new BufferedImage[frames];
         
@@ -109,7 +108,6 @@ public class Player extends MapObject{
                     // Calculate the coordinates based on the desired sprite dimensions
                     int startX = j * desiredWidth;
                     int startY = i * desiredHeight;
-                    System.out.println("Extracting subimage at coordinates: (" + startX + ", " + startY + ")");
                     bi[j] = spritesheet.getSubimage(startX, startY, desiredWidth, desiredHeight);
                 }
         
@@ -142,6 +140,10 @@ public class Player extends MapObject{
         gliding = b;
     }
 
+    public boolean isDead(){
+        return dead;
+    }
+
     public void update(){
         // update position
         getNextPosition();
@@ -155,6 +157,23 @@ public class Player extends MapObject{
 
         if (currentAction == FIREBALL){
             if (animation.hasPlayedOnce()) firing = false; 
+        }
+
+        if (currentAction == DEATH){
+            if (animation.hasPlayedOnce()) {
+                dead = true;
+            }
+        }
+
+        if (dead){
+            BufferedImage[] deathFrames = sprites.get(DEATH);
+
+            // Create an array to hold only the last frame
+            BufferedImage[] lastFrame = new BufferedImage[1];
+            lastFrame[0] = deathFrames[deathFrames.length - 1]; 
+
+            // Set the frame to only the last frame
+            animation.setFrames(lastFrame);       
         }
 
         // fireball attack
@@ -234,6 +253,14 @@ public class Player extends MapObject{
 
                 animation.setFrames(sprites.get(WALKING));
                 animation.setDelay(40);
+                width = 45;
+            }
+        }
+        else if (health == 0) {
+            if (currentAction != DEATH) {
+                currentAction = DEATH;
+                animation.setFrames(sprites.get(DEATH));
+                animation.setDelay(70);
                 width = 45;
             }
         }
@@ -387,10 +414,6 @@ public class Player extends MapObject{
         health -= damage;
         if (health < 0){
             health = 0;
-        }
-
-        if (health == 0){
-            dead = true;
         }
 
         flinching = true;

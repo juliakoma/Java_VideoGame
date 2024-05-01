@@ -25,8 +25,8 @@ public class MenuState extends GameState {
 	
 	private Color titleColor;
 	private Font titleFont;
-	private Clip titleMusic; // Clip for title screen music
-    private Clip gameMusic; // Clip for in-game music
+	private Clip titleMusic; 
+    private Clip gameMusic; 
 	private Font font;
 	
 	public MenuState(GameStateManager gsm) {
@@ -58,7 +58,7 @@ public class MenuState extends GameState {
             gameMusic.open(gameMusicStream);
             
             // Start playing title screen music
-            titleMusic.loop(Clip.LOOP_CONTINUOUSLY);
+            //titleMusic.loop(Clip.LOOP_CONTINUOUSLY);
 			
 		}
 		catch(Exception e) {
@@ -102,12 +102,13 @@ public class MenuState extends GameState {
             // Stop title screen music
             titleMusic.stop();
             // Start in-game music
-            gameMusic.loop(Clip.LOOP_CONTINUOUSLY);
+            //gameMusic.loop(Clip.LOOP_CONTINUOUSLY);
             // start
             gsm.setState((GameStateManager.LEVEL1STATE));
 		}
 		if(currentChoice == 1) {
 			// help
+			gsm.setState((GameStateManager.HELPSTATE));
 		}
 		if(currentChoice == 2) {
 			System.exit(0);
@@ -132,14 +133,6 @@ public class MenuState extends GameState {
 		}
 	}
 	public void keyReleased(int k) {}
-
-	/*private void playMusic(Song song){
-		Media media = new Media(new File(song.getLink()).toURI().toString());
-		mediaPlayer = new MediaPlayer(media);
-		mediaPlayer.setVolume(0.5);
-		mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-		mediaPlayer.play();
-	}*/
 	
 }
 

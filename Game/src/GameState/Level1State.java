@@ -261,8 +261,12 @@ public class Level1State extends GameState{
             int msgWidth = g.getFontMetrics().stringWidth(gameOverMsg);
             g.drawString(gameOverMsg, (GamePanel.WIDTH - msgWidth) / 2, GamePanel.HEIGHT / 2);
             
+            // Draw "Press Enter to Play Again" text
+            g.setFont(new Font("Arial", Font.PLAIN, 24));
+            String playAgainMsg = "Press Enter to Play Again";
+            int playAgainWidth = g.getFontMetrics().stringWidth(playAgainMsg);
+            g.drawString(playAgainMsg, (GamePanel.WIDTH - playAgainWidth) / 2, GamePanel.HEIGHT / 2 + 50);
         }
-
     }
 
     public void keyPressed(int k){
@@ -292,6 +296,13 @@ public class Level1State extends GameState{
                 player.setFiring();
             }
         }
+        else if (gamePaused) {
+            if (k == KeyEvent.VK_ENTER) {
+                // Reset the game to the homepage
+                gsm.setState(GameStateManager.MENUSTATE);
+            }
+        }
+        else{}
 
     }
 

@@ -16,7 +16,6 @@ public class Player extends MapObject{
     private int maxHealth;
     protected boolean player;
 
-    // CHANGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEeEE
     private int fire;
     private int maxFire;
     
@@ -150,6 +149,11 @@ public class Player extends MapObject{
         checkTileMapCollision();
         setPosition(xtemp, ytemp);
 
+        // Check if the player falls off the map
+        if (y > tileMap.getHeight()) {
+            // Respawn the player
+            respawnPlayer();
+        }
         // check attack has stopped
         if (currentAction == SCRATCHING){
             if (animation.hasPlayedOnce()) scratching = false;
@@ -287,6 +291,8 @@ public class Player extends MapObject{
                 player = true;
             }
         }
+
+
     }
 
     public void draw(Graphics2D g){
@@ -412,7 +418,7 @@ public class Player extends MapObject{
         if (flinching) return;
 
         health -= damage;
-        if (health < 0){
+        if (health <= 0){
             health = 0;
         }
 
@@ -420,4 +426,8 @@ public class Player extends MapObject{
         flinchTimer = System.nanoTime();  
     }
 
+    private void respawnPlayer() {
+        setPosition(100, 100);
+        health -= 1; // Decrement player's health or lives
+    }
 }

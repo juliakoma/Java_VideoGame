@@ -49,26 +49,6 @@ public class TileMap {
         tween = 0.07;
     }
 
-    /*(public void loadTiles(String s){
-        try{
-            tileset = ImageIO.read(getClass().getResourceAsStream(s));
-            numTilesAcross = tileset.getWidth() / tileSize;
-            tiles = new Tile[2][numTilesAcross];
-
-            BufferedImage subimage;
-            for(int col = 0; col < numTilesAcross; col++){
-                subimage = tileset.getSubimage(col*tileSize, 0, tileSize, tileSize);
-                tiles[0][col] = new Tile(subimage, Tile.NORMAL);
-                subimage = tileset.getSubimage(col*tileSize, tileSize, tileSize, tileSize);
-                tiles[1][col] = new Tile(subimage, Tile.BLOCKED);
-            }
-
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-    }*/
-
     public void loadTiles(BufferedImage[] tileImages) {
         try {
             // Initialize the tiles array
@@ -139,10 +119,22 @@ public class TileMap {
         return height;
     }
 
-    public int getType(int row, int col){
+    public int getType(int row, int col) {
+        if (row < 0 || row >= numRows || col < 0 || col >= numCols) {
+            return Tile.NORMAL;
+        }
+    
         int rc = map[row][col];
-        int r = rc / numTilesAcross;
-        int c = rc % numTilesAcross;
+        if (rc < 0 || rc >= numTilesAcross) {
+            return Tile.NORMAL;
+        }
+    
+        if (tiles == null || tiles[0] == null || tiles[0].length <= rc) {
+            return Tile.NORMAL;
+        }
+    
+        int r = 0;
+        int c = rc;
         return tiles[r][c].getType();
     }
 

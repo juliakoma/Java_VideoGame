@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import Main.GamePanel;
 import TileMap.TileMap;
 import TileMap.Tile;
+import Entity.Player;
 
 // this will be the base class for objects of the game like the hero or enemy
 public abstract class MapObject {
@@ -95,7 +96,6 @@ public abstract class MapObject {
         topRight = tr == Tile.BLOCKED;
         bottomLeft = bl == Tile.BLOCKED;
         bottomRight = br == Tile.BLOCKED;
-
     }
 
     public void checkTileMapCollision(){

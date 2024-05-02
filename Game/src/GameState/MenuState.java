@@ -10,6 +10,7 @@ import javax.sound.sampled.*;
 
 import Entity.GameState;
 import Main.GamePanel;
+import GameState.IntroState;
 
 public class MenuState extends GameState {
 	
@@ -104,7 +105,8 @@ public class MenuState extends GameState {
             // Start in-game music
             //gameMusic.loop(Clip.LOOP_CONTINUOUSLY);
             // start
-            gsm.setState((GameStateManager.LEVEL1STATE));
+            //gsm.setState((GameStateManager.LEVEL1STATE));
+			gsm.setState((GameStateManager.INTROSTATE));
 		}
 		if(currentChoice == 1) {
 			// help

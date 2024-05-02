@@ -11,16 +11,18 @@ public class GameStateManager {
 	public static final int MENUSTATE = 0;
 	public static final int LEVEL1STATE = 1;
 	public static final int HELPSTATE = 2;
+	public static final int INTROSTATE = 3;
 	
+
 	public GameStateManager() {
 		
 		gameStates = new ArrayList<GameState>();
-		
 		currentState = MENUSTATE;
+
 		gameStates.add(new MenuState(this));
 		gameStates.add(new Level1State(this));
 		gameStates.add(new HelpState(this));
-		
+		gameStates.add(new IntroState(this));
 	}
 	
 	public void setState(int state) {
@@ -37,13 +39,16 @@ public class GameStateManager {
 	}
 	
 	public void keyPressed(int k) {
-		gameStates.get(currentState).keyPressed(k);
+		if (currentState >= 0 && currentState < gameStates.size()) {
+			gameStates.get(currentState).keyPressed(k);
+		}
 	}
-	
+
 	public void keyReleased(int k) {
-		gameStates.get(currentState).keyReleased(k);
+		if (currentState >= 0 && currentState < gameStates.size()) {
+			gameStates.get(currentState).keyReleased(k);
+		}
 	}
-	
 }
 
 

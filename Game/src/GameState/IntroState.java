@@ -69,13 +69,22 @@ public class IntroState extends GameState {
         if (petImage != null) {
             g.drawImage(petImage, imageX, imageY, null);
         }
+
+        // Draw the "Level 1" text
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        String levelText = "Level 1";
+        int levelTextWidth = g.getFontMetrics().stringWidth(levelText);
+        int levelTextX = (GamePanel.WIDTH - levelTextWidth) / 2;
+        int levelTextY = GamePanel.HEIGHT / 6;
+        g.drawString(levelText, levelTextX, levelTextY);
     
         // Draw the intro text
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.PLAIN, 14));
         int textWidth = g.getFontMetrics().stringWidth(INTRO_TEXT.substring(0, charIndex));
         int textX = (GamePanel.WIDTH - textWidth) / 2;
-        int textY = GamePanel.HEIGHT / 4;
+        int textY = GamePanel.HEIGHT / 3;
         g.drawString(INTRO_TEXT.substring(0, charIndex), textX, textY);
     
         // Draw "Press Enter to continue" if the intro is complete

@@ -57,8 +57,15 @@ public class TileMap {
             tiles[0][0] = new Tile(tileImages[0], Tile.NORMAL);
             // Assign each image to a tile
             for (int i = 1; i < tileImages.length; i++) {
-                tiles[0][i] = new Tile(tileImages[i], Tile.BLOCKED); // Assuming all tiles are of type NORMAL
+                if (i >= 3){
+                    tiles[0][i] = new Tile(tileImages[i], Tile.NORMAL);
+                }
+                else{
+                    tiles[0][i] = new Tile(tileImages[i], Tile.BLOCKED); 
+                }
             }
+
+            System.out.println(tileImages.length);
             
             // Set the number of tiles across
             numTilesAcross = tileImages.length;

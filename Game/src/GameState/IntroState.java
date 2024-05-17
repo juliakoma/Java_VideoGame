@@ -13,7 +13,8 @@ import Main.GamePanel;
 import GameState.GameStateManager;
 
 public class IntroState extends GameState {
-    private static final String INTRO_TEXT = "Help me save my pet! The thief stole it...";
+    private static final String INTRO_TEXT = "Help me save my pet! The thief stole it!";
+
     private int charIndex = 0;
     private long lastCharTime;
     private long charDelay = 50; // Delay between each character (in milliseconds)
@@ -48,7 +49,7 @@ public class IntroState extends GameState {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastCharTime > charDelay) {
             lastCharTime = currentTime;
-            if (charIndex < INTRO_TEXT.length()) {
+            if (charIndex < INTRO_TEXT.length()) { 
                 charIndex++;
             } else {
                 introComplete = true;
@@ -86,7 +87,7 @@ public class IntroState extends GameState {
         int textX = (GamePanel.WIDTH - textWidth) / 2;
         int textY = GamePanel.HEIGHT / 3;
         g.drawString(INTRO_TEXT.substring(0, charIndex), textX, textY);
-    
+        
         // Draw "Press Enter to continue" if the intro is complete
         if (introComplete) {
             String continueText = "Press Enter to continue";
@@ -95,8 +96,6 @@ public class IntroState extends GameState {
             g.drawString(continueText, continueTextX, textY + 20);
         }
     }
-    
-    
 
     public void keyPressed(int k) {
         if (k == KeyEvent.VK_ENTER) {

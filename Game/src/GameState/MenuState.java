@@ -59,7 +59,7 @@ public class MenuState extends GameState {
             gameMusic.open(gameMusicStream);
             
             // Start playing title screen music
-            //titleMusic.loop(Clip.LOOP_CONTINUOUSLY);
+            titleMusic.loop(Clip.LOOP_CONTINUOUSLY);
 			
 		}
 		catch(Exception e) {
@@ -103,9 +103,9 @@ public class MenuState extends GameState {
             // Stop title screen music
             titleMusic.stop();
             // Start in-game music
-            //gameMusic.loop(Clip.LOOP_CONTINUOUSLY);
+            gameMusic.loop(Clip.LOOP_CONTINUOUSLY);
             // start
-            //gsm.setState((GameStateManager.LEVEL1STATE));
+            gsm.setState((GameStateManager.LEVEL1STATE));
 			gsm.setState((GameStateManager.INTROSTATE));
 		}
 		if(currentChoice == 1) {

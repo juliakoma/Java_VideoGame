@@ -1,0 +1,249 @@
+@startuml
+
+title __ENTITY's Class Diagram__\n
+
+  namespace Entity {
+    class Entity.Animation {
+        - currentFrame : int
+        - delay : long
+        - frames : BufferedImage[]
+        - playedOnce : boolean
+        - startTime : long
+        + Animation()
+        + getFrame()
+        + getImage()
+        + hasPlayedOnce()
+        + setDelay()
+        + setFrame()
+        + setFrames()
+        + update()
+    }
+  }
+  
+
+  namespace Entity {
+    class Entity.Dinosaur {
+        - sprites : BufferedImage[]
+        + Dinosaur()
+        + draw()
+        - resizeImage()
+    }
+  }
+  
+
+  namespace Entity {
+    abstract class Entity.Enemy {
+        # damage : int
+        # dead : boolean
+        # flinchTimer : long
+        # flinching : boolean
+        # health : int
+        # maxHealth : int
+        + Enemy()
+        + getDamage()
+        + hit()
+        + isDead()
+        + update()
+    }
+  }
+  
+
+  namespace Entity {
+    class Entity.Explosion {
+        - animation : Animation
+        - height : int
+        - remove : boolean
+        - sprites : BufferedImage[]
+        - width : int
+        - x : int
+        - xmap : int
+        - y : int
+        - ymap : int
+        + Explosion()
+        + draw()
+        + setMapPosition()
+        + shouldRemove()
+        + update()
+    }
+  }
+  
+
+  namespace Entity {
+    class Entity.FireBall {
+        - hit : boolean
+        - hitSprites : BufferedImage[]
+        - remove : boolean
+        - sprites : BufferedImage[]
+        + FireBall()
+        + draw()
+        + setHit()
+        + shouldRemove()
+        + update()
+    }
+  }
+  
+
+  namespace Entity {
+    abstract class Entity.GameState {
+        # gsm : GameStateManager
+        + GameState()
+        {abstract} + draw()
+        {abstract} + init()
+        {abstract} + keyPressed()
+        {abstract} + keyReleased()
+        {abstract} + update()
+    }
+  }
+  
+
+  namespace Entity {
+    class Entity.HUD {
+        - font : Font
+        - image : BufferedImage
+        - player : Player
+        + HUD()
+        + draw()
+    }
+  }
+  
+
+  namespace Entity {
+    abstract class Entity.MapObject {
+        # animation : Animation
+        # bottomLeft : boolean
+        # bottomRight : boolean
+        # cheight : int
+        # currCol : int
+        # currRow : int
+        # currentAction : int
+        # cwidth : int
+        # down : boolean
+        # dx : double
+        # dy : double
+        # facingRight : boolean
+        # fallSpeed : double
+        # falling : boolean
+        # height : int
+        # jumpStart : double
+        # jumping : boolean
+        # left : boolean
+        # maxFallSpeed : double
+        # maxSpeed : double
+        # moveSpeed : double
+        # player : boolean
+        # previousAction : int
+        # right : boolean
+        # stopJumpSpeed : double
+        # stopSpeed : double
+        # tileMap : TileMap
+        # tileSize : int
+        # topLeft : boolean
+        # topRight : boolean
+        # up : boolean
+        # width : int
+        # x : double
+        # xdest : double
+        # xmap : double
+        # xtemp : double
+        # y : double
+        # ydest : double
+        # ymap : double
+        # ytemp : double
+        + MapObject()
+        + calculateCorners()
+        + checkTileMapCollision()
+        + draw()
+        + getCHeight()
+        + getCWidth()
+        + getHeight()
+        + getRectangle()
+        + getWidth()
+        + getx()
+        + gety()
+        + intersect()
+        + notOnScreen()
+        + setDown()
+        + setJumping()
+        + setLeft()
+        + setMapPosition()
+        + setPosition()
+        + setRight()
+        + setUp()
+        + setVector()
+    }
+  }
+  
+
+  namespace Entity {
+    abstract class Entity.Pet {
+        # damage : int
+        # dead : boolean
+        # flinchTimer : long
+        # flinching : boolean
+        # health : int
+        # maxHealth : int
+        + Pet()
+        + update()
+    }
+  }
+  
+
+  namespace Entity {
+    class Entity.Player {
+        # player : boolean
+        ~ desiredHeight : int
+        ~ desiredWidth : int
+        {static} - DEATH : int
+        {static} - FALLING : int
+        {static} - FIREBALL : int
+        {static} - GLIDING : int
+        {static} - IDLE : int
+        {static} - JUMPING : int
+        {static} - SCRATCHING : int
+        {static} - WALKING : int
+        - dead : boolean
+        - fire : int
+        - fireBallDamage : int
+        - fireBalls : ArrayList<FireBall>
+        - fireCost : int
+        - firing : boolean
+        - flinchTimer : long
+        - flinching : boolean
+        - gliding : boolean
+        - health : int
+        - maxFire : int
+        - maxHealth : int
+        - numFrames : int[]
+        - scratchDamage : int
+        - scratchRange : int
+        - scratching : boolean
+        - sprites : ArrayList<BufferedImage[]>
+        + Player()
+        + checkAttack()
+        + draw()
+        + getFire()
+        + getHealth()
+        + getMaxFire()
+        + getMaxHealth()
+        + hit()
+        + isDead()
+        + setFiring()
+        + setGliding()
+        + setScratching()
+        + update()
+        - getNextPosition()
+        - respawnPlayer()
+    }
+  }
+  
+
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml

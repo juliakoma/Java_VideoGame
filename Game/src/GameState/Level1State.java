@@ -354,7 +354,7 @@ public class Level1State extends GameState{
         }
         else if (gamePaused && playerWon) {
             // Draw winning screen
-            g.setColor(new Color(255, 182, 193)); // Light pink color
+            g.setColor(new Color(255, 182, 193)); 
             g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
         
             // Draw "You Win!" text

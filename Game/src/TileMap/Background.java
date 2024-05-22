@@ -23,9 +23,11 @@ public class Background {
             
             // Read the original image
             BufferedImage originalImage = ImageIO.read(getClass().getResourceAsStream(s));
+            
             // Define the desired width and height
-            int newWidth = 400; // Adjust this as needed
-            int newHeight = 300; // Adjust this as needed
+            int newWidth = 400; 
+            int newHeight = 300; 
+
             // Create a new resized image
             image = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
             Graphics2D g = image.createGraphics();
